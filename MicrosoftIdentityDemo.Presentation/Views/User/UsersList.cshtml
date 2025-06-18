@@ -1,0 +1,34 @@
+﻿@model IEnumerable<UserListDTO>
+
+@{
+    ViewData["Title"] = "Users List";
+}
+
+<h2 class="mb-4">@ViewData["Title"]</h2>
+
+<table class="table table-bordered table-striped">
+    <thead class="table-light">
+        <tr>
+            <th>Full Name</th>
+            <th>Email</th>
+            <th>Phone Number</th>
+            <th> Arabic Name</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model)
+        {
+            <tr>
+                <td>@user.FullName</td>
+                <td>@user.Email</td>
+                <td>@user.PhoneNumber</td>
+                <td>@user.NameAr</td>
+                <td>
+                    <a asp-action="user-details" asp-controller="users" asp-route-email="@user.Email" class="btn btn-primary mt-3 px-4 py-2">Details</a>
+
+                </td>
+
+            </tr>
+        }
+    </tbody>
+</table>

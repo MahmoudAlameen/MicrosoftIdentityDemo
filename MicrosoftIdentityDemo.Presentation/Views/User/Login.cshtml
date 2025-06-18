@@ -1,0 +1,39 @@
+﻿@model LoginDTO
+
+@{
+    ViewData["Title"] = "Login";
+}
+
+<h2>Login</h2>
+
+<div class="container mt-5">
+    <div class="row justify-content-left">
+        <div class="col-12 col-sm-8 col-md-6 col-lg-4">
+            @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+
+            <form asp-action="Login" asp-controller="User" method="post" class="bg-light p-3 rounded shadow-sm">
+                <div class="form-group mb-3">
+                    <label asp-for="Email" class="form-label small"></label>
+                    <input asp-for="Email" class="form-control form-control-sm" />
+                    <span asp-validation-for="Email" class="text-danger small"></span>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label asp-for="Password" class="form-label small"></label>
+                    <input asp-for="Password" class="form-control form-control-sm" type="password" />
+                    <span asp-validation-for="Password" class="text-danger small"></span>
+                </div>
+
+                <button type="submit" class="btn btn-sm btn-primary w-50">Login</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

@@ -1,0 +1,43 @@
+﻿@model UserDetailsDTO
+
+@{
+    ViewData["Title"] = "User Details";
+}
+
+<h2 class="mb-4">@ViewData["Title"]</h2>
+
+<div class="card shadow-sm p-4">
+    <h4 class="card-title">@Model.FullName</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-3">Email:</dt>
+        <dd class="col-sm-9">@Model.Email</dd>
+
+        <dt class="col-sm-3">Phone:</dt>
+        <dd class="col-sm-9">@Model.PhoneNumber</dd>
+
+        <dt class="col-sm-3">FullName Arabic:</dt>
+        <dd class="col-sm-9">@Model.FullNameAr</dd>
+
+        <dt class="col-sm-3">Roles:</dt>
+        <dd class="col-sm-9">
+            @if (Model.Roles != null && Model.Roles.Any())
+            {
+                <ul class="list-unstyled mb-0">
+                    @foreach (var role in Model.Roles)
+                    {
+                        <li><span class="badge bg-primary">@role</span></li>
+                    }
+                </ul>
+            }
+            else
+            {
+                <span class="text-muted">No roles assigned</span>
+            }
+        </dd>
+    </dl>
+
+    <a asp-action="users-list" asp-controller="users" class="btn btn-primary btn-sm">
+        Back to List
+    </a>
+</div>
