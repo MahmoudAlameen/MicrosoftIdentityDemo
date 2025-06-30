@@ -46,57 +46,13 @@ namespace MicrosoftIdentityDemo.Presentation.Controllers
 
                 return BadRequest(new { errors = modelerrors });
             }
-            ApplicationUser user = new ApplicationUser
+            var result = await UsersService.AddUser(model);
+            if(!result.IsValid)
             {
-                FullName = model.FullName,
-                Email = model.Email,
-                UserName = model.Email,
-                FullNameAR = model.FullNameAR,
-                PhoneNumber = model.PhoneNumber,
-            };
-            var result = await UserManager.CreateAsync(user, model.Password);
-            if (!result.Succeeded)
-            {
-                return BadRequest(new { errors = result.Errors.ToList() });
+                return BadRequest(new { errors = result.ErrorMessages.ToList() });
             }
-            if (model.Role == Role.Admin)
-            {
-                if (!RoleManager.Roles.Any(r => r.Name == Role.Admin.ToString()))
-                {
-                    var creationRoleResult  = await RoleManager.CreateAsync(new ApplicationRole { Name = Role.Admin.ToString() });
-                    if (!creationRoleResult.Succeeded)
-                    {
-                        return BadRequest(creationRoleResult.Errors.Select(e => e.Description).ToList());
-                    }
-
-                }
-               var addToRoleResult = await  UserManager.AddToRolesAsync(user, new List<string> { Role.Admin.ToString() });
-                if (!addToRoleResult.Succeeded)
-                {
-                    var errors = addToRoleResult.Errors.ToList();
-                    return BadRequest(new { errors = addToRoleResult.Errors.ToList() }); 
-                }
-            }
-            if (model.Role == Role.User)
-            {
-                if (!RoleManager.Roles.Any(r => r.Name == Role.User.ToString()))
-                {
-                    var creationRoleResult = await RoleManager.CreateAsync(new ApplicationRole { Name = Role.User.ToString() });
-                    if (!creationRoleResult.Succeeded)
-                    {
-                        return BadRequest(creationRoleResult.Errors.Select(e => e.Description).ToList());
-                    }
-
-                }
-                var addToRoleResult = await UserManager.AddToRolesAsync(user, new List<string> { Role.User.ToString() });
-                if (!addToRoleResult.Succeeded)
-                {
-                    var errors = addToRoleResult.Errors.ToList();
-                    return BadRequest(new { errors = addToRoleResult.Errors.ToList() });
-                }
-            }
-
-            return RedirectToAction("LoginView", new LoginDTO { Email = user.Email, Password = model.Password});
+            
+            return RedirectToAction("LoginView", new LoginDTO { Email = model.Email, Password = model.Password});
         }
 
         [HttpGet("login-view")]
